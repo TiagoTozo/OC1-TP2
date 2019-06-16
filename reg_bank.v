@@ -62,10 +62,10 @@ initial begin
 	clk=0;
 	dado = 256;
 	e_l = 1;
-	reg_e = 2'b00;
+	reg_e = 2'b00;//isso aqui faz com que o dado na variavel "dado" (256) seja escrito em mem[0]
 	#5
 	e_l=0;
-	fnt1=2'b00;
+	fnt1=2'b00;//isso aqui faz com que seja realizada uma leitura de mem[0] para dado_l_1, que deveria ficar com 256
 	#5 $finish;
 	end
 	always 
