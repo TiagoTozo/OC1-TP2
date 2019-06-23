@@ -24,8 +24,8 @@ module control(
   ALU my_alu (.rs(rs_a),.rt(rt_a),.op(op_a),.rd(rd_a));
 endmodule
 
-//testando esse filho de uma puta
-module test_fdp();
+//testando esse modulo :)
+module test_cont();
   //variaveis de teste para memória
   reg clk_m_t,Op2En_t,Op2RW_t,M_Clear_t;
   reg [31:0]Read_PC_t,R_W_Addr_t,DataWrite_t;
@@ -44,26 +44,38 @@ clk_m_t,Op2En_t,Op2RW_t,M_Clear_t,Read_PC_t,R_W_Addr_t,DataWrite_t,Instruction_t
 clk_r_t,opwrite_t,reg_write_t,src_1_t,src_2_t,data_t,data_src_1_t,data_src_2_t,
 rs_t,rt_t,op_t,rd_t
 );
+integer i;
+reg [31:0] aux;
+reg [2:0] Opcode;
+reg [1:0]FonteA,Dest;
+reg [24:0]Imediato;
 initial begin
 $dumpfile("control.vcd");
 $dumpvars;
-#1
-//ler a memória : DataRead_t = mem[R_W_Addr_t];
-clk_m_t=1;
-Op2En_t=1;
-Op2RW_t=0;
-R_W_Addr_t=32'b00;
-#5
-rs_t=DataRead_t;
-#2
-//ler a memória : DataRead_t = mem[R_W_Addr_t];
-R_W_Addr_t=32'b01;
-#5
-rt_t=DataRead_t;
-#2
-op_t=4'b0001;
-#5 $finish;
+i=0;
+Read_PC_t=32'b01;
+Opcode=Instruction_t[31:29];
+FonteA=Instruction_t[28:27];
+Dest=Instruction_t[26:25];
+Imediato=Instruction_t[24:0];
+case(Opcode)
+  //soma
+  3'b000:;
+  //sub
+  3'b001:;
+  //div
+  3'b010:;
+  //mul
+  3'b011:;
+  //mem clear
+  3'b100:;
+  //halt  
+  3'b101:;
+  //mem read
+  3'b110:;
+  //mem write
+  3'b111:;
+endcase
+#20 $finish;
 end
-
-always #4 clk_m_t=!clk_m_t;
 endmodule
