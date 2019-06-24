@@ -80,11 +80,9 @@ module control(
 
             3'b101: // HLT (parada do processador)
                 $finish
-
-            // DUVIDA: qual o endereco de memoria de onde devo ler e escrever? ele nao vem no codigo da instrucao (representado como xx nas chamadas abaixo)
             3'b110: // MR (Memory read)
                 reg [31:0] temp;
-                Memoria(CLK, x, xx, x, 1'b1, 1'b0, x, temp); // busca o valor na memoria e coloca em temp
+                Memoria(CLK, x, imediato, x, 1'b1, 1'b0, x, temp); // busca o valor na memoria e coloca em temp
                 case(dest)
                     2'b00: // escrever em reg_a
                         reg_bank(CLK, 1'b1, 2'b00, x, x, temp, x, x); // escreve temp
@@ -105,7 +103,7 @@ module control(
                     2'b11: // ler zero
                         temp = 0;
                 endcase
-                Memoria(CLK, x, xx, temp, 1'b1, 1'b1, x, x); // escreve o valor de temp na memoria
+                Memoria(CLK, x, imediato, temp, 1'b1, 1'b1, x, x); // escreve o valor de temp na memoria
             default: 
                 $display  ("Erro: opcode invalido");
                 $finish
