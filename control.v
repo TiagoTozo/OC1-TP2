@@ -1,6 +1,6 @@
-`include "ALU_t.v"
-`include "reg_bank.v"
-`include "Memoria.v"
+`include "alu.v"
+`include "register_bank.v"
+`include "memory.v"
 
 module control(
     input wire CLK, // clock
