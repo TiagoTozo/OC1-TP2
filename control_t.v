@@ -44,23 +44,39 @@ clk_m_t,Op2En_t,Op2RW_t,M_Clear_t,Read_PC_t,R_W_Addr_t,DataWrite_t,Instruction_t
 clk_r_t,opwrite_t,reg_write_t,src_1_t,src_2_t,data_t,data_src_1_t,data_src_2_t,
 rs_t,rt_t,op_t,rd_t
 );
-integer i;
-reg [31:0] aux;
 reg [2:0] Opcode;
 reg [1:0]FonteA,Dest;
 reg [24:0]Imediato;
 initial begin
 $dumpfile("control.vcd");
 $dumpvars;
-i=0;
-Read_PC_t=32'b01;
+clk_r_t=1;
+data_t=32'b0;
+opwrite_t=1;
+reg_write_t=2'b00;
+#1
+reg_write_t=2'b01;
+#1
+reg_write_t=2'b10;
+end
+initial begin
+#5
+clk_r_t=0;
+Read_PC_t=32'b00;
+#1
 Opcode=Instruction_t[31:29];
 FonteA=Instruction_t[28:27];
 Dest=Instruction_t[26:25];
 Imediato=Instruction_t[24:0];
 case(Opcode)
   //soma
-  3'b000:;
+  3'b000:begin 
+  /*reg*/ opwrite_t=0;src_1_t=2'b10;src_2_t=FonteA;
+  #2
+  /*alu*/ rs_t=Imediato;rt_t=data_src_2_t;op_t=4'b1000;
+  #2
+  /*reg*/ data_t=rd_t;opwrite_t=1;reg_write_t=2'b10;
+  end
   //sub
   3'b001:;
   //div
@@ -76,6 +92,9 @@ case(Opcode)
   //mem write
   3'b111:;
 endcase
-#20 $finish;
+#10 $finish;
+end
+always begin
+#1 clk_r_t = !clk_r_t; 
 end
 endmodule
